@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace PointOfSale
 { 
+    //User Data to add new users or get already registered ones
     public static class UserData
     {
+        //Already created some users as this project uses Inmemory
         public static List<User> Users = new List<User>()
              {
                 new User { Id = 1, name = "admin", email = "email", password = Password.EncodePasswordToBase64("adminpass"), role = "Admin" },
                 new User { Id = 2, name = "cashier", email = "email", password = Password.EncodePasswordToBase64("cashierpass"), role = "Cashier" },
                 new User { Id = 3, name = "manager", email = "email", password = "managerpass", role = "Admin" },
-                // Add more users as needed
+                
             };
         private static int _userIdCounter = 4;
 

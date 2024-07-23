@@ -9,6 +9,7 @@ namespace PointOfSale
 {
     internal class EmailValidation
     {
+        //Built in validation method of email.
         public static bool IsValidEmail(string email)
         {
             try

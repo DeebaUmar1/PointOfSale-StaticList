@@ -44,6 +44,7 @@ namespace PointOfSale
             }
         }
 
+        // Menu For Product Management (CRUD)
         public static void ShowAdminMenu()
         {
             while (true)
@@ -65,6 +66,7 @@ namespace PointOfSale
                 {
                     case "1":
                         Console.Clear();
+                       
                         bool done = AddProduct();
                         if (done)
                         {
@@ -102,6 +104,7 @@ namespace PointOfSale
                         break;
                     case "5":
                         Console.Clear();
+                        //Purchase is basically admin buying products from some supplier and it gets stored in inventory.
                         Purchase.AddProductToPurchase();
                         break;
                     case "6":
@@ -114,6 +117,7 @@ namespace PointOfSale
             }
         }
 
+        //Menu For Inventory Management
         public static void InventoryMenu()
         {
             while (true)
@@ -134,10 +138,13 @@ namespace PointOfSale
                 {
                     case "1":
                         Console.Clear();
+                        //If admin wants to increase the quantity of product in the inventory
                         Inventory.UpdateStock("increment");
                         break;
                     case "2":
                         Console.Clear();
+
+                        //If admin wants to decrease the quantity of product in the inventory
                         Inventory.UpdateStock("decrement");
                         break;
                     case "3":
@@ -159,7 +166,7 @@ namespace PointOfSale
         }
 
       
-
+        //Validating Admin input of a product and sending the object to Inventory
         public static bool AddProduct()
         {
             Console.Clear();
@@ -232,6 +239,7 @@ namespace PointOfSale
            
         }
 
+        //Validating all the values admin wants to update about a product
         public static bool UpdateProduct(int input)
         {
             Console.Clear();
@@ -297,6 +305,7 @@ namespace PointOfSale
             
         }
 
+        //Admin has the ability to set/change roles of registered users
         public static void SetUserRole()
         {
             Console.Clear();

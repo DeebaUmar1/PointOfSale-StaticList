@@ -52,6 +52,86 @@ namespace PointOfSale
                 Console.ReadKey();
             }
         }
+
+        //Adding mulitple products to sale according to choice
+        public static void AddProductToSale()
+        {
+            bool addMoreProducts = true;
+            while (addMoreProducts)
+            {
+                Console.Clear();
+                Inventory.ViewProducts();
+                Console.Write("Enter Product ID: ");
+                var productId = Convert.ToInt32(Console.ReadLine());
+
+                var product = Inventory.Products.Find(p => p.Id == productId);
+                if (product != null)
+                {
+                    Console.Write("Now enter the quantity: ");
+                    var q = Convert.ToInt32(Console.ReadLine());
+                    while (q <= 0 || q > product.quantity)
+                    {
+                        Console.WriteLine("Invalid quantity!");
+                        Console.Write("Enter valid quantity: ");
+                        q = Convert.ToInt32(Console.ReadLine());
+                    }
+
+                    //Creates a sale in which one product is stored
+                    var sale = new SaleProducts
+                    {
+                        Date = DateTime.Now,
+                        Quantity = q,
+                        ProductId = productId,
+                        ProductName = product.name,
+                        ProductPrice = product.price
+                    };
+
+                    product.quantity -= q;
+                    //This is the list of products being added to sale
+                    Transaction.Add(sale);
+                    Console.WriteLine("Product added to sale");
+                }
+                else
+                {
+                    Console.WriteLine("Product not found.");
+                }
+
+                Console.Write("Do you want to add another product to the sale? (y/n): ");
+                string? response = Console.ReadLine();
+                while (response == null)
+                {
+                    Console.WriteLine("You have to enter y or n: ");
+                    Console.Write("Do you want to add another product to the sale? (y/n): ");
+                    response = Console.ReadLine();
+                }
+                response = response.Trim().ToLower();
+                while (response != "y" && response != "n")
+                {
+                    Console.WriteLine("Invalid response!");
+                    Console.Write("Do you want to add another product to the sale? (y/n): ");
+                    response = Console.ReadLine();
+                    response = response?.Trim().ToLower();
+                }
+                if (response != "y")
+                {
+                    addMoreProducts = false;
+                }
+
+            }
+            if (Transaction.SaleProducts.Count > 0)
+            {
+                Console.WriteLine("Sale completed.");
+                Generate();
+            }
+            else
+            {
+                Console.WriteLine("Press any key to go back!");
+            }
+
+        }
+
+        //In case of Sale Products still in transaction
+        //Cashier can update quantity of the sale product
         public static void UpdateProductsInSale()
         {
             if (Transaction.SaleProducts.Count == 0)
@@ -95,6 +175,7 @@ namespace PointOfSale
                         originalProduct.quantity += saleProductToUpdate.Quantity; // Restore the original quantity
                         saleProductToUpdate.Quantity = newQuantity;
                        
+                        // incase cashier enters the quantity as 0 then that product will be removed from the list
                         if (newQuantity == 0)
                         {
                             Transaction.SaleProducts.Remove(saleProductToUpdate);
@@ -170,81 +251,7 @@ namespace PointOfSale
                 ShowCashierMenu();
             }
         }
-        public static void AddProductToSale()
-        {
-            bool addMoreProducts = true;
-            while (addMoreProducts)
-            {
-                Console.Clear();
-                Inventory.ViewProducts();
-                Console.Write("Enter Product ID: ");
-                var productId = Convert.ToInt32(Console.ReadLine());
-
-                var product = Inventory.Products.Find(p => p.Id == productId);
-                if (product != null)
-                {
-                    Console.Write("Now enter the quantity: ");
-                    var q = Convert.ToInt32(Console.ReadLine());
-                    while (q <= 0 || q > product.quantity)
-                    {
-                        Console.WriteLine("Invalid quantity!");
-                        Console.Write("Enter valid quantity: ");
-                        q = Convert.ToInt32(Console.ReadLine());
-                    }
-                    
-                    
-                    var sale = new SaleProducts
-                    {
-                        Date = DateTime.Now,
-                        Quantity = q,
-                        ProductId = productId,
-                        ProductName = product.name,
-                        ProductPrice = product.price
-                    };
-                    
-                    product.quantity -= q;
-                     
-                    Transaction.Add(sale);
-                    Console.WriteLine("Product added to sale");
-                }
-                else
-                {
-                    Console.WriteLine("Product not found.");
-                }
-
-                Console.Write("Do you want to add another product to the sale? (y/n): ");
-                string? response = Console.ReadLine();
-                while(response == null)
-                {
-                    Console.WriteLine("You have to enter y or n: ");
-                    Console.Write("Do you want to add another product to the sale? (y/n): ");
-                    response = Console.ReadLine();
-                }
-                response = response.Trim().ToLower();
-                    while (response != "y" && response != "n" )
-                    {
-                        Console.WriteLine("Invalid response!");
-                        Console.Write("Do you want to add another product to the sale? (y/n): ");
-                        response = Console.ReadLine();
-                        response = response?.Trim().ToLower();
-                    }
-                if (response != "y")
-                {
-                    addMoreProducts = false;
-                }
-
-            }
-            if (Transaction.SaleProducts.Count > 0)
-            {
-                Console.WriteLine("Sale completed.");
-                Generate();
-            }
-            else
-            {
-                Console.WriteLine("Press any key to go back!");
-            }
-         
-        }
+       
         public static void PrintTotalAmount()
         {
             Console.WriteLine($"{"Total Amount:",-30} {CalculateTotalAmount():C}");
@@ -253,7 +260,7 @@ namespace PointOfSale
         {
             if (Transaction.SaleProducts.Count > 0)
             {
-
+                //calculates total amount of one sale which may include multiple products
                 double total = Transaction.SaleProducts.Sum(s => s.Quantity * s.ProductPrice);
                 return total;
             }
@@ -275,6 +282,7 @@ namespace PointOfSale
 
                 foreach (var sale in Transaction.SaleProducts)
                 {
+                    //Total Price of each product in case one if quantity is more than one.
                     string totalPrice = (sale.Quantity * sale.ProductPrice).ToString("C");
                     Console.WriteLine($"{sale.Quantity,-10} {sale.ProductName,-20} {sale.ProductPrice,-10:C} {totalPrice,-10}");
                 }

@@ -9,6 +9,9 @@ namespace PointOfSale
 {
     public static class Purchase
     {
+        //Admin purchases products from supplier
+        
+        //Products provided by supplier
         public static List<Product> PurchaseProducts = new List<Product>()
         {
             new Product { Id = 3, name = "Monitor", price = 199.99, quantity = 20, type = "Electronics", category = "Computers" },
@@ -16,6 +19,7 @@ namespace PointOfSale
             new Product { Id = 5, name = "Desk Lamp", price = 24.99, quantity = 15, type = "Furniture", category = "Office" },
             new Product { Id = 6, name = "USB Cable", price = 9.99, quantity = 100, type = "Peripherals", category = "Accessories" },
         };
+
         public static void ViewProducts()
         {
             Console.Clear();
@@ -156,6 +160,7 @@ namespace PointOfSale
            
         }
 
+        //if transaction is completed the new bought products are added to the inventory
         public static void AddProductsToInventory()
         {
             foreach (var sale in Transaction.SaleProducts)

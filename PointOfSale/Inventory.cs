@@ -7,6 +7,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PointOfSale
 {
+    //Products CRUD
     public static class Inventory
     {
         public static List<Product> Products = new List<Product>()
@@ -51,7 +52,7 @@ namespace PointOfSale
            
         }
 
-
+        //To take the id of product admin wants to update
         public static bool Update()
         {
             bool updated = false;
@@ -87,10 +88,10 @@ namespace PointOfSale
 
         }
 
+        //Actually updates the product, in case of null the old value is retained
 
         public static bool Update2(int id, string? name, string? category, string? type, string? quantity, string? price)
         {
-            // Find the product by ID
             try
             {
                 var product = Products.Find(p => p.Id == id);
@@ -109,7 +110,7 @@ namespace PointOfSale
             {
                 // Handle the exception
                 Console.WriteLine($"An error occurred: {ex.Message}");
-                // Optionally log the exception or take other actions
+                
                 return false;
             }
             return false;
@@ -144,6 +145,7 @@ namespace PointOfSale
             //Console.ReadKey();
         }
 
+        //For inventory management
        public static void UpdateStock(string option)
         {
             

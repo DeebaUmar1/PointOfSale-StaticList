@@ -47,8 +47,9 @@ namespace PointOfSale
                     }
                     else if (role == "Wrong")
                     {
-                        Console.WriteLine("Wrong Password!");
-                        
+                        Console.WriteLine("Incorrect Password!");
+                      //  Console.WriteLine("Press any key to go to login!");
+                        Console.ReadKey();
                     }
                     else if (role == "norole")
                     {
@@ -110,9 +111,10 @@ namespace PointOfSale
                     Console.WriteLine("Enter your password again: ");
                     pswd2 = Console.ReadLine();
                 }
-
+                //Encoding Password 
                 string pswd = Password.EncodePasswordToBase64(pswd2);
 #pragma warning disable CS8601 // Possible null reference assignment.
+                //New users will be assigned role of cashier unless admin changes that.
                 var user = new User { email = email, password = pswd, name = name, role = "Cashier" };
 #pragma warning restore CS8601 // Possible null reference assignment.
                 try
