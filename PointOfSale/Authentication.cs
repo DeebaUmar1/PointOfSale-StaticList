@@ -119,10 +119,21 @@ namespace PointOfSale
 #pragma warning restore CS8601 // Possible null reference assignment.
                 try
                 {
-                    UserData.Add(user);
-                    Console.WriteLine("User registered successfully with default role 'Cashier'.\"");
-                    Console.WriteLine("Press any key to proceed..");
-                    Console.ReadKey();
+                    bool added = UserData.Add(user);
+                    if (added)
+                    {
+                        Console.WriteLine("User registered successfully with default role 'Cashier'.\"");
+                        Console.WriteLine("Press any key to proceed..");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        Console.WriteLine("User already exists!");
+                        Console.WriteLine("Register again!");
+                        Console.ReadKey();
+                        return;
+                    }
+
                 }
                 catch (Exception ex)
                 {
